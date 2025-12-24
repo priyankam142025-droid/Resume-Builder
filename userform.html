@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Select CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .user-data-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+        /* Smaller form controls */
+        .form-control, .form-select {
+            border-radius: 8px !important;
+            border: 2px solid #e9ecef !important;
+            padding: 8px 12px !important;
+            font-size: 0.875rem !important;
+            height: calc(2.25rem + 2px) !important;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        .header-title {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        /* Smaller Bootstrap Select */
+        .bootstrap-select .dropdown-toggle {
+            border-radius: 8px !important;
+            border: 2px solid #e9ecef !important;
+            padding: 8px 12px !important;
+            background: white !important;
+            height: calc(2.375rem + 2px) !important;
+            font-size: 0.875rem !important;
+        }
+        .bootstrap-select .dropdown-toggle:focus {
+            border-color: #667eea !important;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+        }
+        .bootstrap-select .dropdown-menu {
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        .bootstrap-select .bs-placeholder {
+            color: #6c757d;
+        }
+        .form-section {
+            margin-bottom: 1.25rem;
+        }
+        /* Address Section */
+        .address-section {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            border: 2px solid #e3f2fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 2rem;
+        }
+        .address-section .form-label {
+            color: #667eea;
+        }
+        .address-section-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e3f2fd;
+        }
+        /* Preview Page Styles */
+        .preview-page .preview-group {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        .preview-page .preview-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+        }
+        .preview-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        .preview-value {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .btn-save-final {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            font-weight: 600;
+            padding: 15px 40px;
+        }
+        .btn-save-final:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+        .btn-back {
+            background: linear-gradient(45deg, #6c757d, #495057);
+        }
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3);
+        }
+        .page-indicator {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- FORM PAGE -->
+    <div class="container form-page" id="formPage">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="user-data-container p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h1 class="display-5 fw-bold header-title mb-3">
+                            <i class="bi bi-person-lines-fill me-3"></i>User Data Form
+                        </h1>
+                       
+                    </div>
+
+                    <form id="userDataForm">
+                        <!-- Name Field -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="name" class="form-label required">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ADDRESS SECTION - Grouped Together -->
+                        <div class="address-section">
+                            <div class="address-section-header">
+                                <i class="bi bi-geo-alt-fill me-2"></i>Contact Details
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="address1" class="form-label required">Address Line 1</label>
+                                    <input type="text" class="form-control" id="address1" name="address1" required>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="address2" class="form-label">Address Line 2</label>
+                                    <input type="text" class="form-control" id="address2" name="address2">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cityDropdown" class="form-label required">City</label>
+                                    <select class="form-select" id="cityDropdown" name="cityDropdown" required>
+                                        <option value="">Select City</option>
+                                        <option value="mumbai">Mumbai</option>
+                                        <option value="delhi">Delhi</option>
+                                        <option value="bangalore">Bangalore</option>
+                                        <option value="chennai">Chennai</option>
+                                        <option value="kolkata">Kolkata</option>
+                                        <option value="hyderabad">Hyderabad</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="stateDropdown" class="form-label required">State</label>
+                                    <select class="form-select" id="stateDropdown" name="stateDropdown" required>
+                                        <option value="">Select State</option>
+                                        <option value="maharashtra">Maharashtra</option>
+                                        <option value="delhi">Delhi</option>
+                                        <option value="karnataka">Karnataka</option>
+                                        <option value="tamilnadu">Tamil Nadu</option>
+                                        <option value="westbengal">West Bengal</option>
+                                        <option value="telangana">Telangana</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="postalCode" class="form-label required">Postal Code</label>
+                                    <input type="text" class="form-control" id="postalCode" name="postalCode" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="dob" class="form-label required">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dob" name="dob" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label class="form-label required">Gender</label>
+                                    <div class="d-flex gap-3 mt-2 flex-wrap">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                                            <label class="form-check-label" for="male">Male</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
+                                            <label class="form-check-label" for="female">Female</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="gender" id="other" value="other" required>
+                                            <label class="form-check-label" for="other">Other</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multiple Cities -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="cityMulti" class="form-label required">City</label>
+                                    <select class="selectpicker" id="cityMulti" name="cityMulti[]" multiple data-max-options="4" data-selected-text-format="count > 2" data-live-search="true" title="Select Cities">
+                                        <option value="mumbai">Mumbai</option>
+                                        <option value="delhi">Delhi</option>
+                                        <option value="bangalore">Bangalore</option>
+                                        <option value="chennai">Chennai</option>
+                                        <option value="kolkata">Kolkata</option>
+                                        <option value="hyderabad">Hyderabad</option>
+                                        <option value="pune">Pune</option>
+                                        <option value="ahmedabad">Ahmedabad</option>
+                                        <option value="jaipur">Jaipur</option>
+                                        <option value="lucknow">Lucknow</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multiple Pincodes -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="pincodeMulti" class="form-label required">Pincode</label>
+                                    <select class="selectpicker" id="pincodeMulti" name="pincodeMulti[]" multiple data-max-options="5" data-selected-text-format="count > 2" data-live-search="true" title="Select Pincodes">
+                                        <option value="400001">400001 - Mumbai</option>
+                                        <option value="110001">110001 - Delhi</option>
+                                        <option value="560001">560001 - Bangalore</option>
+                                        <option value="600001">600001 - Chennai</option>
+                                        <option value="700001">700001 - Kolkata</option>
+                                        <option value="500001">500001 - Hyderabad</option>
+                                        <option value="411001">411001 - Pune</option>
+                                        <option value="380001">380001 - Ahmedabad</option>
+                                        <option value="302001">302001 - Jaipur</option>
+                                        <option value="226001">226001 - Lucknow</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Languages -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="languages" class="form-label required">Languages Known</label>
+                                    <select class="selectpicker" id="languages" name="languages[]" data-selected-text-format="count > 2" data-live-search="true" title="Select Languages">
+                                        <option value="english">English</option>
+                                        <option value="hindi">Hindi</option>
+                                        <option value="tamil">Tamil</option>
+                                        <option value="telugu">Telugu</option>
+                                        <option value="bengali">Bengali</option>
+                                        <option value="marathi">Marathi</option>
+                                        <option value="gujarati">Gujarati</option>
+                                        <option value="punjabi">Punjabi</option>
+                                        <option value="kannada">Kannada</option>
+                                        <option value="malayalam">Malayalam</option>
+                                        <option value="odia">Odia</option>
+                                        <option value="assamese">Assamese</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="status" class="form-label required">Status</label>
+                                    <select class="form-select" id="status" name="status" required>
+                                        <option value="">Select Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="suspended">Suspended</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Onboarding Date -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="onboardingDate" class="form-label required">Onboarding Date</label>
+                                    <input type="date" class="form-control" id="onboardingDate" name="onboardingDate" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Type -->
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="type" class="form-label required">User Type</label>
+                                    <select class="form-select" id="type" name="type" required>
+                                        <option value="">Select Type</option>
+                                        <option value="individual">Individual</option>
+                                        <option value="agency">Agency</option>
+                                        <option value="subagency">Sub Agency</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-eye me-2"></i>Save and Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEW PAGE (Hidden initially) -->
+    <div class="container preview-page" id="previewPage" style="display: none;">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                <div class="user-data-container p-4 p-md-5 preview-container">
+                    <div class="text-center mb-5">
+                        <div class="page-indicator">
+                            <h1 class="display-5 fw-bold header-title mb-2">
+                                <i class="bi bi-eye-fill me-3"></i> Save and Submit
+                            </h1>
+                            <p class="lead text-white mb-0">Step 2: Review all information</p>
+                        </div>
+                    </div>
+
+                    <div id="previewContent">
+                        <!-- Preview content will be populated here -->
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <button type="button" class="btn btn-secondary btn-lg btn-back me-3" id="backToForm">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Edit
+                        </button>
+                        <button type="button" class="btn btn-success btn-lg btn-save-final" id="saveFinalBtn">
+                            <i class="bi bi-check-circle-fill me-2"></i>Confirm & Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('.selectpicker').selectpicker({
+                showTick: true,
+                actionsBox: true,
+                liveSearch: true
+            });
+            
+            document.getElementById('onboardingDate').valueAsDate = new Date();
+        });
+
+        // Form submission - Navigate to preview page
+        document.getElementById('userDataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validation
+            if (!document.querySelector('input[name="gender"]:checked')) {
+                alert('Please select your gender');
+                return;
+            }
+            
+            // Collect form data (removed contactDetails)
+            const data = {
+                name: document.getElementById('name').value.trim(),
+                address1: document.getElementById('address1').value.trim(),
+                address2: document.getElementById('address2').value.trim() || 'N/A',
+                cityDropdown: document.getElementById('cityDropdown').value,
+                stateDropdown: document.getElementById('stateDropdown').value,
+                postalCode: document.getElementById('postalCode').value.trim(),
+                dob: document.getElementById('dob').value,
+                gender: document.querySelector('input[name="gender"]:checked').value,
+                cityMulti: $('#cityMulti').val() || [],
+                pincodeMulti: $('#pincodeMulti').val() || [],
+                languages: $('#languages').val() || [],
+                status: document.getElementById('status').value,
+                onboardingDate: document.getElementById('onboardingDate').value,
+                type: document.getElementById('type').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Store data and show preview page
+            sessionStorage.setItem('userPreviewData', JSON.stringify(data));
+            showPreviewPage(data);
+        });
+
+        function showPreviewPage(data) {
+            document.getElementById('formPage').style.display = 'none';
+            document.getElementById('previewPage').style.display = 'block';
+            
+            const previewContent = document.getElementById('previewContent');
+            const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+            
+            const citiesSelected = data.cityMulti.length > 0 ? data.cityMulti.map(city => capitalizeFirst(city.replace(/_/g, ' '))).join(', ') : 'None selected';
+            const pincodesSelected = data.pincodeMulti.length > 0 ? data.pincodeMulti.join(', ') : 'None selected';
+            const languagesSelected = data.languages.length > 0 ? data.languages.map(lang => capitalizeFirst(lang.replace(/_/g, ' '))).join(', ') : 'None selected';
+            
+            previewContent.innerHTML = `
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-person-fill me-2 text-primary"></i>Name
+                            </div>
+                            <div class="preview-value">${data.name}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-calendar-heart-fill me-2 text-success"></i>Date of Birth & Gender
+                            </div>
+                            <div class="preview-value">${new Date(data.dob).toLocaleDateString('en-IN')}</div>
+                            <div class="mt-2"><small class="text-muted">Gender: ${capitalizeFirst(data.gender)}</small></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-geo-alt-fill me-2 text-info"></i>📍 Complete Address
+                            </div>
+                            <div class="preview-value">${data.address1}</div>
+                            ${data.address2 !== 'N/A' ? `<div class="preview-value mt-2">${data.address2}</div>` : ''}
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    📍 ${capitalizeFirst(data.cityDropdown.replace(/_/g, ' '))} - 
+                                    ${capitalizeFirst(data.stateDropdown.replace(/_/g, ' '))} ${data.postalCode}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-building me-2 text-warning"></i>Multiple Cities
+                            </div>
+                            <div class="preview-value">${citiesSelected}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-pin-map-fill me-2 text-danger"></i>Multiple Pincodes
+                            </div>
+                            <div class="preview-value">${pincodesSelected}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-translate me-2 text-secondary"></i>Languages Known
+                            </div>
+                            <div class="preview-value">${languagesSelected}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-check-square-fill me-2 text-success"></i>Account Status
+                            </div>
+                            <div class="preview-value">${capitalizeFirst(data.status)}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-person-badge-fill me-2 text-primary"></i>User Type
+                            </div>
+                            <div class="preview-value">${capitalizeFirst(data.type.replace(/_/g, ' '))}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-5">
+                        <div class="preview-group">
+                            <div class="preview-label">
+                                <i class="bi bi-calendar-check-fill me-2 text-info"></i>Onboarding Date
+                            </div>
+                            <div class="preview-value">${new Date(data.onboardingDate).toLocaleDateString('en-IN')}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success shadow-lg">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong>✅ All information looks perfect!</strong> Click "Confirm & Save" to finalize.
+                </div>
+            `;
+        }
+
+        // Back to form button
+        document.getElementById('backToForm').addEventListener('click', function() {
+            document.getElementById('previewPage').style.display = 'none';
+            document.getElementById('formPage').style.display = 'block';
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+        // Save final data
+        document.getElementById('saveFinalBtn').addEventListener('click', function() {
+            const finalData = JSON.parse(sessionStorage.getItem('userPreviewData'));
+            
+            const blob = new Blob([JSON.stringify(finalData, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `user-data-${finalData.name}-${Date.now()}.json`;
+            a.click();
+            
+            alert(`✅ User data saved successfully!\n\nName: ${finalData.name}\nTotal fields: ${Object.keys(finalData).length}\n\nData also downloaded as JSON file.`);
+            console.log('🎉 Saved User Data:', finalData);
+            
+            document.getElementById('userDataForm').reset();
+            $('.selectpicker').selectpicker('val', '');
+            $('.selectpicker').selectpicker('refresh');
+            document.getElementById('onboardingDate').valueAsDate = new Date();
+            
+            document.getElementById('previewPage').style.display = 'none';
+            document.getElementById('formPage').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
